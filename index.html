@@ -600,6 +600,34 @@ sendCeo = async function(text, msgEl, inputEl){
  if(_nav) _nav.addEventListener("click",loadPrompts);
  window.__loadPrompts=loadPrompts;
 })();
+   </script><script>
+(function(){
+ const sec=document.getElementById("p-tulis");
+ if(!sec) return;
+ function addCopy(){
+  sec.querySelectorAll("[data-gen]").forEach(btn=>{
+   const card=btn.parentElement;
+   if(card.querySelector("[data-prompt]")) return;
+   const p=card.querySelector(".res");
+   if(!p) return;
+   const b=document.createElement("button");
+   b.className="btn ghost";
+   b.textContent="Salin prompt";
+   b.style.marginTop="8px";
+   b.style.marginLeft="6px";
+   b.dataset.prompt="1";
+   b.onclick=async()=>{
+    const t=p.textContent.trim();
+    try{ await navigator.clipboard.writeText(t); b.textContent="Tersalin"; }
+    catch(e){ const r=document.createRange(); r.selectNodeContents(p); const s=window.getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent="Blok lalu salin"; }
+    setTimeout(()=>b.textContent="Salin prompt",2000);
+   };
+   btn.insertAdjacentElement("afterend",b);
+  });
+ }
+ new MutationObserver(addCopy).observe(sec,{childList:true,subtree:true});
+ addCopy();
+})();
    </script>
 </body>
 </html>
