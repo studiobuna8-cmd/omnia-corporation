@@ -628,6 +628,57 @@ sendCeo = async function(text, msgEl, inputEl){
  new MutationObserver(addCopy).observe(sec,{childList:true,subtree:true});
  addCopy();
 })();
+   </script><script>
+(function(){
+ const nav=document.getElementById("nav");
+ const main=document.querySelector("main");
+ const b=document.createElement("button");
+ b.dataset.p="kantor";
+ b.innerHTML='<span class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span><span class="lb">Kantor</span>';
+ nav.insertBefore(b, nav.children[1]);
+ const sec=document.createElement("section");
+ sec.id="p-kantor"; sec.className="hide";
+ sec.innerHTML='<div class="top"><div><h1>Kantor Omnia</h1><p>Status diambil dari tugas yang sedang berjalan. Yang bekerja tampil aktif, yang menunggu tampil redup.</p></div></div>'+
+  '<div class="card" id="kLegenda" style="margin-bottom:14px;font-size:12px;color:var(--mut)">● Bekerja &nbsp; ● Online &nbsp; ● Menunggu</div>'+
+  '<div id="kGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px"></div>';
+ main.appendChild(sec);
+
+ const COL={EXE:"#4338ca",RES:"#0f766e",PRD:"#7c3aed",MKT:"#db2777",SAL:"#d97706",FIN:"#475569",WEB:"#0369a1",DAT:"#0f766e",CRT:"#be185d"};
+ const DEP=code=>{const p=String(code).split("-")[0];return ({CEO:"EXE",STR:"EXE",TEC:"EXE",GRO:"EXE",FIN:"EXE",OPS:"EXE",RES:"RES",COM:"RES",PRD:"PRD",DEV:"PRD",QA:"PRD",MKT:"MKT",CNT:"MKT",SEO:"MKT",ADS:"MKT",SAL:"SAL",CS:"SAL",CRM:"SAL",ACC:"FIN",AUD:"FIN",WEB:"WEB",DAT:"DAT",ART:"CRT"})[p]||"EXE";};
+
+ async function loadKantor(){
+  const grid=document.getElementById("kGrid");
+  try{
+   const [ag,tk]=await Promise.all([
+    fetch(URL+"/rest/v1/agents?select=id,code,name,title,status&order=code",{headers:hdr()}).then(r=>r.json()),
+    fetch(URL+"/rest/v1/tasks?select=agent_id,goal,status&status=in.(assigned,running)",{headers:hdr()}).then(r=>r.json())
+   ]);
+   const aktif=new Map();
+   (Array.isArray(tk)?tk:[]).forEach(t=>aktif.set(t.agent_id,t.goal));
+   grid.innerHTML=(Array.isArray(ag)?ag:[]).map(a=>{
+    const tugas=aktif.get(a.id);
+    const bekerja=!!tugas;
+    const warna=COL[DEP(a.code)]||"#64748b";
+    const label=bekerja?"Bekerja":(a.status==="online"?"Online":"Menunggu");
+    const dot=bekerja?"#16a34a":(a.status==="online"?"#3b82f6":"#cbd5e1");
+    return '<div class="card" style="opacity:'+(bekerja||a.status==="online"?"1":"0.6")+';border-left:4px solid '+warna+';padding:12px">'+
+     '<div style="display:flex;justify-content:space-between;align-items:center">'+
+     '<b style="font-size:13px">'+esc(a.name)+'</b><span style="width:9px;height:9px;border-radius:50%;background:'+dot+';display:inline-block"></span></div>'+
+     '<div class="muted">'+esc(a.code)+' · '+esc(a.title)+'</div>'+
+     '<div style="margin-top:8px;font-size:12px;color:'+(bekerja?"#15803d":"#64748b")+'">'+label+'</div>'+
+     (bekerja?'<div class="res" style="margin-top:6px;font-size:11px">'+esc(String(tugas).slice(0,80))+'</div>':'')+
+     '</div>';
+   }).join("")||'<p class="muted">Belum ada karyawan.</p>';
+  }catch(e){ grid.innerHTML='<p class="muted">Gagal memuat: '+esc(e.message)+'</p>'; }
+ }
+
+ b.addEventListener("click",()=>{
+  document.querySelectorAll("#nav button").forEach(x=>x.classList.toggle("on",x===b));
+  ["home","emp","cmd","tulis","hasil","prospek","appr","sales","set"].forEach(p=>{const el=document.getElementById("p-"+p); if(el) el.classList.add("hide");});
+  sec.classList.remove("hide"); loadKantor(); window.scrollTo(0,0);
+ });
+ document.querySelectorAll("#nav button").forEach(x=>{ if(x!==b) x.addEventListener("click",()=>sec.classList.add("hide")); });
+})();
    </script>
 </body>
 </html>
