@@ -679,6 +679,124 @@ sendCeo = async function(text, msgEl, inputEl){
  });
  document.querySelectorAll("#nav button").forEach(x=>{ if(x!==b) x.addEventListener("click",()=>sec.classList.add("hide")); });
 })();
+   </script><script>
+(function(){
+ const sec=document.getElementById("p-kantor");
+ if(!sec) return;
+ sec.innerHTML='<div class="top"><div><h1>Kantor Omnia</h1><p>Denah 2D. Status diambil dari tugas yang sedang berjalan.</p></div></div>'+
+  '<div class="card" style="margin-bottom:12px;font-size:12px;color:var(--mut)">● Bekerja &nbsp; ● Online &nbsp; ● Menunggu. Geser ke samping untuk melihat seluruh denah.</div>'+
+  '<div id="kGrid" class="hide"></div>'+
+  '<div style="overflow:auto;border-radius:16px;border:1px solid var(--line);background:#0f172a"><canvas id="kCv" width="960" height="560" style="width:960px;display:block;cursor:pointer"></canvas></div>';
+
+ const STAFF=[
+ ["CEO-01","Nafiq","CEO","M","EXE"],["STR-01","Buna","Chief Strategy","M","EXE"],["TEC-01","Ibra","Chief Technology","M","EXE"],["GRO-01","Novi","Chief Growth","F","EXE"],["FIN-01","Alfi","Chief Finance","M","EXE"],["OPS-01","Elis","Chief Operations","F","EXE"],["ADS-01","Vino","Advertising","M","MKT"],["ACC-01","Wulan","Finance Assistant","F","FIN"],
+ ["RES-01","Nadia","Market Researcher","F","RES"],["COM-01","Fajar","Competitor Analyst","M","RES"],["PRD-01","Tiara","Product Manager","F","PRD"],["DEV-01","Yoga","AI Developer","M","PRD"],["QA-01","Mira","Quality Assurance","F","PRD"],["MKT-01","Rendi","Marketing Manager","M","MKT"],["CNT-01","Salsa","Content Creator","F","MKT"],["SEO-01","Galih","SEO Specialist","M","MKT"],
+ ["SAL-01","Putri","Sales Agent","F","SAL"],["CS-01","Andre","Customer Service","M","SAL"],["CRM-01","Intan","CRM","F","SAL"],["AUD-01","Hadi","AI Auditor","M","FIN"],["ART-01","Ayu","Creative Director","F","CRT"],["ART-16","Dinda","Fashion Designer","F","CRT"],["ART-17","Rama","Packaging Designer","M","CRT"],["ART-18","Kirana","Environment Artist","F","CRT"],
+ ["ART-19","Bagas","Photo Retoucher","M","CRT"],["ART-20","Laras","Campaign Designer","F","CRT"],["WEB-01","Rafi","Pemimpin Web App","M","WEB"],["WEB-02","Sinta","Web Developer","F","WEB"],["WEB-03","Yudha","Frontend","M","WEB"],["DAT-01","Lia","Pemimpin Data","F","DAT"],["DAT-02","Hendra","Analis Data","M","DAT"],["DAT-03","Rina","Analis Peluang","F","DAT"]
+ ];
+ const DEPTC={EXE:"#4338ca",RES:"#0f766e",PRD:"#6d28d9",MKT:"#be185d",SAL:"#b45309",FIN:"#475569",CRT:"#9d174d",WEB:"#0369a1",DAT:"#155e75"};
+ const HAIR=["#111827","#6b3a1a","#ff6fa5","#8b5cf6","#f5d061","#2ecc71","#dc2626","#2563eb"];
+ const SKIN=["#fcd9b8","#f1c27d","#c68642","#8d5524"];
+ const ST=STAFF.map((s,i)=>({s,cx:90+(i%8)*110,cy:150+Math.floor(i/8)*118,i,hair:HAIR[i%HAIR.length],skin:SKIN[i%SKIN.length],col:DEPTC[s[4]]}));
+
+ let AG=[],TK=[],frame=0;
+ const cv=document.getElementById("kCv"), ctx=cv.getContext("2d");
+ ctx.imageSmoothingEnabled=false;
+
+ async function refresh(){
+  try{
+   const [a,t]=await Promise.all([
+    fetch(URL+"/rest/v1/agents?select=id,code,name,title,status",{headers:hdr()}).then(r=>r.json()),
+    fetch(URL+"/rest/v1/tasks?select=agent_id,goal,status&status=in.(assigned,running)",{headers:hdr()}).then(r=>r.json())
+   ]);
+   if(Array.isArray(a)) AG=a;
+   if(Array.isArray(t)) TK=t;
+  }catch(e){}
+ }
+ function agentOf(code){ return AG.find(x=>x.code===code); }
+ function taskOf(code){ const a=agentOf(code); return a?TK.find(t=>t.agent_id===a.id)||null:null; }
+
+ function R(x,y,w,h,c){ ctx.fillStyle=c; ctx.fillRect(x,y,w,h); }
+ function T(s,x,y,size,c,align,weight){ ctx.fillStyle=c; ctx.font=(weight||"")+" "+size+"px monospace"; ctx.textAlign=align||"left"; ctx.fillText(s,x,y); }
+
+ function room(){
+  for(let y=100;y<560;y+=20) for(let x=0;x<960;x+=20) R(x,y,20,20,((x+y)/20)%2?"#d8b48a":"#cfa577");
+  R(0,0,960,100,"#e8edf5"); R(0,96,960,4,"#94a3b8");
+  for(let i=0;i<5;i++){ const wx=40+i*180; R(wx,14,120,66,"#64748b"); R(wx+4,18,112,58,"#93c5fd"); R(wx+10,50,14,22,"#1e3a8a"); R(wx+30,40,16,32,"#1e3a8a"); R(wx+70,34,18,38,"#1e3a8a"); }
+  R(330,10,300,50,"#1e2a5a"); R(330,10,300,3,"#d4a017");
+  T("OMNIA VIRTUAL OFFICE",480,36,20,"#fde68a","center","bold");
+  T("AI CORPORATION · 32 AI AGENTS",480,52,9,"#9bd9ff","center");
+  R(10,120,22,40,"#8b5e3c"); R(6,108,30,14,"#22c55e");
+  R(928,120,22,40,"#8b5e3c"); R(924,108,30,14,"#22c55e");
+ }
+
+ function person(x,y,p,working){
+  const u=3, S=(c,a,b,w,h)=>R(x+a*u,y+b*u,w*u,h*u,c);
+  const f=p.g==="F";
+  if(f) S(p.hair,1,1,10,9);
+  S(p.skin,3,2,6,6);
+  S(p.hair,3,0,6,3);
+  if(f){ S(p.hair,2,2,1,4); S(p.hair,9,2,1,4); }
+  const blink=frame%50<2;
+  S("#111827",4,5,1,blink?1:2); S("#111827",7,5,1,blink?1:2);
+  S("#b45353",5,7,2,1);
+  S(p.shirt,3,9,6,5);
+  if(f){ S(p.shirt,2,14,8,3); S("#1f2937",4,17,1,3); S("#1f2937",7,17,1,3); }
+  else { S("#ffffff",5,9,2,1); S("#facc15",5,10,2,3); S("#1f2937",3,14,2,5); S("#1f2937",7,14,2,5); S("#111111",3,19,2,1); S("#111111",7,19,2,1); }
+  const off=working?frame%2:0;
+  S(p.shirt,1,9,2,5); S(p.shirt,9,9,2,5);
+  S(p.skin,1,14+off,2,1); S(p.skin,9,14+(1-off),2,1);
+ }
+
+ function desk(cx,cy,working){
+  R(cx-44,cy+18,88,8,"#d6a86a"); R(cx-44,cy+26,88,10,"#a86f3d");
+  R(cx+18,cy-6,26,18,"#1f2937");
+  R(cx+20,cy-4,22,13,working?(frame%8<4?"#7dd3fc":"#38bdf8"):"#334155");
+  R(cx+14,cy+16,26,3,"#e5e7eb");
+ }
+
+ function draw(){
+  frame++;
+  ctx.clearRect(0,0,960,560);
+  room();
+  ST.forEach(p=>{
+   const a=agentOf(p.s[0]);
+   const t=taskOf(p.s[0]);
+   const working=!!t;
+   const online=!!(a&&a.status==="online");
+   ctx.globalAlpha=(working||online)?1:0.45;
+   person(p.cx-18,p.cy-44,{g:p.s[3],hair:p.hair,skin:p.skin,shirt:p.col},working);
+   desk(p.cx,p.cy,working);
+   R(p.cx-36,p.cy+38,72,12,p.col);
+   T(p.s[1],p.cx,p.cy+47,8,"#ffffff","center","bold");
+   T(p.s[0],p.cx,p.cy+58,7,"#cbd5e1","center");
+   ctx.globalAlpha=1;
+   R(p.cx-22,p.cy-50,8,8,working?"#16a34a":(online?"#3b82f6":"#94a3b8"));
+   if(working){
+    const txt=String(t.goal).slice(0,20);
+    ctx.font="9px monospace";
+    const w=Math.max(70,ctx.measureText(txt).width+12);
+    R(p.cx-w/2,p.cy-76,w,14,"#ffffff");
+    T(txt,p.cx,p.cy-66,9,"#0f172a","center");
+   }
+  });
+ }
+
+ cv.addEventListener("click",e=>{
+  const r=cv.getBoundingClientRect();
+  const lx=(e.clientX-r.left)*960/r.width, ly=(e.clientY-r.top)*560/r.height;
+  const hit=ST.find(p=>Math.abs(lx-p.cx)<46&&ly>p.cy-80&&ly<p.cy+62);
+  if(!hit) return;
+  const t=taskOf(hit.s[0]), a=agentOf(hit.s[0]);
+  alert(hit.s[1]+" ("+hit.s[0]+")\n"+hit.s[2]+"\n\nStatus: "+(t?"Sedang bekerja":(a&&a.status==="online"?"Online":"Menunggu tugas"))+(t?"\nTugas: "+t.goal:""));
+ });
+
+ refresh(); draw();
+ setInterval(()=>{ if(!sec.classList.contains("hide")) draw(); },180);
+ setInterval(refresh,15000);
+ const btn=document.querySelector('#nav button[data-p="kantor"]');
+ if(btn) btn.addEventListener("click",()=>{ refresh(); });
+})();
    </script>
 </body>
 </html>
