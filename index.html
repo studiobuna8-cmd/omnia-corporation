@@ -370,6 +370,43 @@ async function pAkun(m){
 
 const PAGES={home:pHome,emp:pEmp,ceo:pCeo,hasil:pHasil,appr:pAppr,sales:pSales,prospek:pProspek,akun:pAkun};
 start();
+</script><style>
+@media(max-width:820px){
+ #nav{touch-action:pan-x;overscroll-behavior-x:contain;scroll-behavior:smooth}
+}
+</style>
+<script>
+(function(){
+ const KEYP="omnia_page";
+ PAGE=localStorage.getItem(KEYP)||PAGE;
+ const nav=document.getElementById("nav");
+
+ let sx=0, drag=false;
+ nav.addEventListener("touchstart",e=>{ sx=e.touches[0].clientX; drag=false; },{passive:true});
+ nav.addEventListener("touchmove",e=>{ if(Math.abs(e.touches[0].clientX-sx)>8) drag=true; },{passive:true});
+ nav.addEventListener("click",e=>{
+  if(drag){ e.preventDefault(); e.stopPropagation(); drag=false; }
+ },true);
+
+ const oldRender=window.render;
+ let RQ=Promise.resolve();
+ window.render=function(){
+  RQ=RQ.then(()=>oldRender()).catch(()=>{});
+  return RQ;
+ };
+
+ window.go=function(p){
+  PAGE=p;
+  localStorage.setItem(KEYP,p);
+  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.p===p));
+  const btn=nav.querySelector('button[data-p="'+p+'"]');
+  if(btn&&btn.scrollIntoView) btn.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});
+  clearInterval(TIMER);
+  TIMER=setInterval(()=>{ if(PAGE!=="ceo") window.render(); },30000);
+  window.render();
+  window.scrollTo(0,0);
+ };
+})();
 </script>
 </body>
 </html>
