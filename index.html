@@ -5,65 +5,130 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>OMNIA Dashboard</title>
 <style>
-:root{--navy:#1B2A4A;--gold:#C9A96E;--bg:#f5f6f8;--card:#fff;--ink:#1f2937;--mut:#6b7280;--line:#e5e7eb;--ok:#15803d;--warn:#b45309;--bad:#b91c1c}
+:root{
+ --navy:#1B2A4A;--navy2:#26395F;--gold:#C9A96E;
+ --bg:#f4f6fb;--card:#ffffff;--ink:#1e293b;--mut:#64748b;--line:#e7ebf2;
+ --ok:#15803d;--okbg:#e9f7ef;--warn:#a16207;--warnbg:#fdf6e3;
+ --bad:#b91c1c;--badbg:#fdeeee;--blue:#1d4ed8;--bluebg:#eaf1ff;
+ --r:18px;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
 .hide{display:none!important}
+
+/* layout */
 .app{display:flex;min-height:100vh}
-aside{width:220px;background:var(--navy);padding:20px 14px;position:sticky;top:0;height:100vh;flex-shrink:0}
-.brand{font-weight:600;letter-spacing:.5px;color:#fff;font-size:15px;margin-bottom:24px}
-.brand span{color:var(--gold)}
-nav button{display:block;width:100%;text-align:left;background:none;border:0;color:#cbd5e1;padding:10px 12px;border-radius:10px;font-size:14px;cursor:pointer;margin-bottom:4px}
-nav button:hover,nav button.on{background:rgba(255,255,255,.08);color:#fff}
-nav button.on{box-shadow:inset 3px 0 0 var(--gold)}
-main{flex:1;padding:24px;max-width:1100px;width:100%}
-h1{font-size:20px;margin:0 0 4px;font-weight:600}
-.sub{color:var(--mut);margin:0 0 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
-.stat .l{color:var(--mut);font-size:12px}
-.stat .v{font-size:24px;font-weight:600;margin-top:4px}
-.row{padding:12px 0;border-bottom:1px solid var(--line)}
-.row:last-child{border-bottom:0}
-.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:#f3f4f6;color:var(--mut);margin-right:6px}
-.tag.ok{background:#dcfce7;color:var(--ok)}
-.tag.warn{background:#fef3c7;color:var(--warn)}
-.tag.bad{background:#fee2e2;color:var(--bad)}
-.res{white-space:pre-wrap;background:#f9fafb;border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:8px;font-size:13px;line-height:1.5;max-height:260px;overflow:auto}
-.btn{background:var(--navy);color:#fff;border:0;border-radius:10px;padding:9px 14px;font-size:13px;cursor:pointer}
-.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
-.btn:disabled{opacity:.45;cursor:default}
-textarea,input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;background:#fff}
-textarea{min-height:90px;resize:vertical}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.muted{color:var(--mut)}
-.err{color:var(--bad);font-size:13px;min-height:18px;margin-top:8px}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer}
+aside{width:232px;flex-shrink:0;background:linear-gradient(180deg,var(--navy),var(--navy2));padding:26px 16px;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;letter-spacing:.3px;margin:0 0 30px 8px;font-size:15px}
+.brand i{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--gold),#e8d5b0);display:inline-block}
+.brand small{display:block;color:#9fb0cc;font-weight:500;font-size:11px;letter-spacing:0}
+nav{display:flex;flex-direction:column;gap:4px}
+nav button{position:relative;text-align:left;background:none;border:0;color:#b9c6dc;padding:11px 14px;border-radius:12px;font:inherit;font-size:14px;cursor:pointer;transition:background .15s,color .15s}
+nav button:hover{background:rgba(255,255,255,.06);color:#fff}
+nav button.on{background:rgba(201,169,110,.16);color:#fff;font-weight:600}
+nav button.on::before{content:"";position:absolute;left:-16px;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--gold)}
+main{flex:1;padding:32px 36px;max-width:1140px;width:100%}
+
+/* header */
+.top{margin-bottom:24px}
+.top h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.2px}
+.top p{margin:4px 0 0;color:var(--mut)}
+.greet{color:var(--mut);font-size:13px;margin-bottom:4px}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:16px;box-shadow:0 1px 2px rgba(15,23,42,.04),0 10px 30px -18px rgba(15,23,42,.12)}
+.card h3{margin:0 0 12px;font-size:15px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:16px}
+.stat{display:flex;flex-direction:column;gap:8px}
+.stat .ic{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-weight:700;font-size:13px}
+.stat .l{color:var(--mut);font-size:12.5px}
+.stat .v{font-size:26px;font-weight:700;letter-spacing:-.4px;line-height:1.1}
+.stat .s{color:var(--mut);font-size:12px}
+.t-blue{background:var(--bluebg);color:var(--blue)}
+.t-ok{background:var(--okbg);color:var(--ok)}
+.t-warn{background:var(--warnbg);color:var(--warn)}
+.t-navy{background:#e9edf6;color:var(--navy)}
+
+/* list rows */
+.row{padding:14px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0;padding-bottom:0}
+.row:first-child{padding-top:0}
+.row b{font-weight:600}
+.meta{color:var(--mut);font-size:12.5px;margin-top:2px}
+
+/* badges */
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:999px;background:#f1f4f9;color:var(--mut);margin-right:6px}
+.tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
+.tag.ok{background:var(--okbg);color:var(--ok)}
+.tag.warn{background:var(--warnbg);color:var(--warn)}
+.tag.bad{background:var(--badbg);color:var(--bad)}
+.tag.blue{background:var(--bluebg);color:var(--blue)}
+
+/* text blocks */
+.res{white-space:pre-wrap;background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:10px;font-size:13.5px;line-height:1.6;max-height:300px;overflow:auto;color:#334155}
+.note{background:#f8fafc;border-radius:12px;padding:12px 14px;color:var(--mut);font-size:13px}
+
+/* form */
+textarea,input{width:100%;border:1px solid #d9e0ea;border-radius:12px;padding:12px 14px;font:inherit;background:#fff;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+textarea:focus,input:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 4px rgba(27,42,74,.08)}
+textarea{min-height:110px;resize:vertical}
+
+/* buttons */
+.btn{background:var(--navy);color:#fff;border:0;border-radius:12px;padding:10px 16px;font:inherit;font-weight:600;font-size:13px;cursor:pointer;transition:transform .08s,opacity .15s}
+.btn:hover{opacity:.92}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid #d9e0ea}
+.btn.gold{background:var(--gold);color:var(--navy)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+
+/* chips */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chip{border:1px solid #d9e0ea;background:#fff;border-radius:999px;padding:7px 14px;font:inherit;font-size:12.5px;cursor:pointer;color:var(--mut)}
 .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-#gate{max-width:360px;margin:12vh auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px}
+
+/* states */
+.empty{text-align:center;padding:28px 12px;color:var(--mut)}
+.empty b{display:block;color:var(--ink);font-weight:600;margin-bottom:4px}
+.err{color:var(--bad);font-size:13px;min-height:18px;margin-top:10px}
+.pill{display:inline-block;font-size:12px;color:var(--mut)}
+
+/* login */
+#gate{max-width:380px;margin:12vh auto;background:#fff;border:1px solid var(--line);border-radius:22px;padding:30px;box-shadow:0 20px 50px -25px rgba(15,23,42,.25)}
+#gate .brand{color:var(--navy);margin:0 0 6px}
+#gate .brand i{width:34px;height:34px}
+#gate .brand small{color:var(--mut)}
+#gate p{color:var(--mut);margin:8px 0 16px}
+
+/* mobile */
 @media(max-width:820px){
- aside{position:fixed;bottom:0;top:auto;left:0;right:0;width:auto;height:auto;padding:6px;z-index:10}
+ aside{position:fixed;left:0;right:0;bottom:0;top:auto;width:auto;height:auto;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));z-index:20;border-radius:20px 20px 0 0}
  .brand{display:none}
- nav{display:flex;overflow-x:auto}
- nav button{margin:0 2px;text-align:center;white-space:nowrap;font-size:12px;padding:8px 10px;width:auto}
- nav button.on{box-shadow:none;background:var(--gold);color:var(--navy)}
- main{padding:16px 14px 90px}
+ nav{flex-direction:row;overflow-x:auto;gap:2px;scrollbar-width:none}
+ nav::-webkit-scrollbar{display:none}
+ nav button{flex:0 0 auto;text-align:center;font-size:12px;padding:9px 12px;border-radius:12px;white-space:nowrap}
+ nav button.on{background:var(--gold);color:var(--navy)}
+ nav button.on::before{display:none}
+ main{padding:20px 16px 110px}
+ .top h1{font-size:20px}
+ .grid{grid-template-columns:1fr 1fr;gap:10px}
+ .stat .v{font-size:22px}
+ .card{padding:16px}
 }
 </style>
 </head>
 <body>
 
 <div id="gate" class="hide">
- <div class="brand" style="color:var(--navy)">OMNIA <span style="color:var(--gold)">Corporation</span></div>
+ <div class="brand"><i></i><div>OMNIA<small>Corporation</small></div></div>
  <div id="gKey" class="hide">
-  <p class="muted">Tempel publishable key Supabase (cukup sekali di perangkat ini).</p>
+  <p>Tempel publishable key Supabase. Cukup sekali di perangkat ini.</p>
   <input id="key" placeholder="sb_publishable_...">
   <div class="actions"><button class="btn" id="saveKey">Simpan</button></div>
  </div>
  <div id="gLogin" class="hide">
-  <p class="muted">Masuk sebagai owner.</p>
-  <input id="email" type="email" placeholder="Email" autocapitalize="off" style="margin-bottom:8px">
+  <p>Masuk sebagai owner untuk melihat perusahaan.</p>
+  <input id="email" type="email" placeholder="Email" autocapitalize="off" style="margin-bottom:10px">
   <input id="pw" type="password" placeholder="Password">
   <div class="actions"><button class="btn" id="doLogin">Masuk</button></div>
  </div>
@@ -72,7 +137,7 @@ textarea{min-height:90px;resize:vertical}
 
 <div class="app hide" id="app">
  <aside>
-  <div class="brand">OMNIA <span>Corp</span></div>
+  <div class="brand"><i></i><div>OMNIA<small>AI Corporation</small></div></div>
   <nav id="nav">
    <button data-p="home" class="on">Beranda</button>
    <button data-p="emp">Karyawan</button>
@@ -93,9 +158,11 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const rp=v=>"Rp "+Number(v||0).toLocaleString("id-ID");
 const fmt=d=>d?new Date(d).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}):"-";
-const head=(t,s)=>`<h1>${t}</h1><p class="sub">${s}</p>`;
-const stat=(l,v,s)=>`<div class="card stat"><div class="l">${l}</div><div class="v">${v}</div><div class="muted" style="font-size:12px">${s}</div></div>`;
-const taskRow=t=>`<div class="row"><b>${esc(t.goal)}</b><div class="muted" style="margin:4px 0">${esc(t.agents?.code||"-")} · ${esc(t.agents?.name||"")} · ${fmt(t.created_at)}</div><span class="tag ${t.status==="completed"?"ok":t.status==="failed"?"bad":""}">${esc(t.status)}</span>${t.review_notes?`<div class="muted" style="font-size:12px;margin-top:4px">${esc(String(t.review_notes).slice(0,140))}</div>`:""}</div>`;
+const hi=()=>{const h=new Date().getHours();return h<11?"Selamat pagi":h<15?"Selamat siang":h<18?"Selamat sore":"Selamat malam"};
+const head=(t,s)=>`<div class="top"><h1>${t}</h1><p>${s}</p></div>`;
+const empty=(t,s)=>`<div class="empty"><b>${t}</b>${s||""}</div>`;
+const stat=(l,v,s,tone,ico)=>`<div class="card stat" style="margin:0"><div class="ic ${tone||"t-navy"}">${ico||""}</div><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s||""}</div></div>`;
+const taskRow=t=>`<div class="row"><b>${esc(t.goal)}</b><div class="meta">${esc(t.agents?.code||"-")} · ${esc(t.agents?.name||"")} · ${fmt(t.created_at)}</div><div style="margin-top:6px"><span class="tag ${t.status==="completed"?"ok":t.status==="failed"?"bad":t.status==="cancelled"?"":"blue"}">${esc(t.status)}</span></div>${t.review_notes?`<div class="meta" style="margin-top:6px">${esc(String(t.review_notes).slice(0,160))}</div>`:""}</div>`;
 
 let KEY=localStorage.getItem("omnia_publishable_key")||"";
 let TOK=localStorage.getItem("omnia_token")||"";
@@ -174,28 +241,28 @@ async function pHome(m){
  ]);
  const cnt=s=>tk.filter(t=>t.status===s).length;
  const online=ag.filter(a=>a.status==="online").length;
- m.innerHTML=head("Beranda","Ringkasan perusahaan hari ini, dari data database.")+
+ m.innerHTML=`<div class="greet">${hi()}, Owner</div>`+head("Beranda","Ringkasan perusahaan hari ini, dari data database.")+
  `<div class="grid">
-  ${stat("Karyawan AI",ag.length,online+" online")}
-  ${stat("Sedang bekerja",cnt("assigned")+cnt("running"),"tugas aktif")}
-  ${stat("Tugas selesai",cnt("completed"),"sepanjang waktu")}
-  ${stat("Menunggu persetujuan",ap.length,"butuh keputusan Anda")}
+  ${stat("Karyawan AI",ag.length,online+" online","t-navy","AI")}
+  ${stat("Sedang bekerja",cnt("assigned")+cnt("running"),"tugas aktif","t-blue","▶")}
+  ${stat("Tugas selesai",cnt("completed"),"sepanjang waktu","t-ok","✓")}
+  ${stat("Menunggu persetujuan",ap.length,"butuh keputusan Anda","t-warn","!")}
  </div>
- <div class="card"><b>Tugas terbaru</b><div style="margin-top:8px">${recent.map(taskRow).join("")||'<p class="muted">Belum ada tugas.</p>'}</div></div>`;
+ <div class="card"><h3>Tugas terbaru</h3>${recent.map(taskRow).join("")||empty("Belum ada tugas.")}</div>`;
 }
 
 async function pEmp(m){
  const ag=await api("/rest/v1/agents?select=code,name,title,status&order=code&limit=200");
- m.innerHTML=head("Karyawan",`${ag.length} karyawan AI dengan jabatan masing-masing.`)+
- `<div class="card">${ag.map(a=>`<div class="row"><b>${esc(a.name)}</b> <span class="muted">${esc(a.code)}</span><div class="muted" style="margin:2px 0">${esc(a.title)}</div><span class="tag ${a.status==="online"?"ok":""}">${esc(a.status||"-")}</span></div>`).join("")}</div>`;
+ m.innerHTML=head("Karyawan",`${ag.length} karyawan AI, masing-masing dengan jabatannya.`)+
+ `<div class="card">${ag.map(a=>`<div class="row"><b>${esc(a.name)}</b> <span class="meta" style="margin-left:6px">${esc(a.code)}</span><div class="meta">${esc(a.title)}</div><div style="margin-top:6px"><span class="tag ${a.status==="online"?"ok":""}">${esc(a.status||"-")}</span></div></div>`).join("")||empty("Belum ada karyawan.")}</div>`;
 }
 
 async function pCeo(m){
  if(!$("send")){
   m.innerHTML=head("CEO","Tulis tujuan. CEO menyusun rencana dan membagi tugas ke karyawan sesuai jabatannya.")+
-  `<div class="card"><textarea id="cmd" placeholder="Contoh: Susun rencana riset produk digital untuk UMKM"></textarea>
+  `<div class="card"><h3>Tujuan baru</h3><textarea id="cmd" placeholder="Contoh: Susun rencana riset produk digital untuk UMKM"></textarea>
    <div class="actions"><button class="btn" id="send">Kirim ke CEO</button></div><div class="err" id="cmdMsg"></div></div>
-   <div class="card"><b>Tugas CEO</b><div id="ceoList" style="margin-top:8px"></div></div>`;
+   <div class="card"><h3>Tugas CEO</h3><div id="ceoList"></div></div>`;
   $("send").onclick=async()=>{
    const t=$("cmd").value.trim(); if(!t) return;
    $("send").disabled=true; $("cmdMsg").textContent="Mengirim...";
@@ -211,12 +278,12 @@ async function pCeo(m){
 }
 async function loadCeo(){
  const rows=await api("/rest/v1/tasks?select=goal,status,review_notes,created_at,agents!inner(code,name)&agents.code=eq.CEO-01&order=created_at.desc&limit=10");
- const el=$("ceoList"); if(el) el.innerHTML=rows.map(taskRow).join("")||'<p class="muted">Belum ada tugas CEO.</p>';
+ const el=$("ceoList"); if(el) el.innerHTML=rows.map(taskRow).join("")||empty("Belum ada tugas CEO.");
 }
 
 async function pHasil(m){
  if(!$("dList")){
-  m.innerHTML=head("Hasil","Hasil kerja yang sudah lolos pemeriksaan AUD-01. Salin atau unduh untuk dipakai.")+
+  m.innerHTML=head("Hasil","Hasil yang sudah lolos pemeriksaan AUD-01. Salin atau unduh untuk dipakai.")+
   `<div class="chips">${["Semua","Teks","Deskripsi","Gambar","File"].map(f=>`<button class="chip" data-f="${f}">${f}</button>`).join("")}</div><div id="dList"></div>`;
   m.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{ FILTER=b.dataset.f; loadHasil(); });
  }
@@ -228,19 +295,20 @@ async function loadHasil(){
  document.querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",b.dataset.f===FILTER));
  const list=FILTER==="Semua"?rows:rows.filter(r=>r.kind===FILTER.toLowerCase());
  el.innerHTML=list.map(r=>`<div class="card">
-  <div><span class="tag">${esc(r.kind)}</span><span class="muted" style="font-size:12px">${fmt(r.created_at)}</span></div>
-  <b style="display:block;margin-top:6px">${esc(r.title)}</b>
-  ${r.kind==="gambar"&&r.url?`<img src="${esc(r.url)}" style="max-width:100%;border-radius:10px;margin-top:8px">`:""}
+  <div><span class="tag blue">${esc(r.kind)}</span><span class="meta">${fmt(r.created_at)}</span></div>
+  <h3 style="margin:10px 0 0">${esc(r.title)}</h3>
+  ${r.kind==="gambar"&&r.url?`<img src="${esc(r.url)}" style="max-width:100%;border-radius:12px;margin-top:10px">`:""}
   <div class="res">${esc(r.content||"")}</div>
   <div class="actions"><button class="btn ghost" data-copy="${r.id}">Salin</button><button class="btn ghost" data-dl="${r.id}">Unduh .txt</button></div>
- </div>`).join("")||'<p class="muted">Belum ada hasil.</p>';
+ </div>`).join("")||empty("Belum ada hasil.","Hasil akan muncul di sini setelah lolos pemeriksaan.");
  el.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>{ const r=rows.find(x=>x.id===b.dataset.copy); copyText(r?.content||"",b); });
  el.querySelectorAll("[data-dl]").forEach(b=>b.onclick=()=>{ const r=rows.find(x=>x.id===b.dataset.dl); download((r?.title||"hasil")+".txt",r?.content||""); });
 }
 async function copyText(t,btn){
+ const old=btn.textContent;
  try{ await navigator.clipboard.writeText(t); btn.textContent="Tersalin"; }
  catch(e){ btn.textContent="Salin manual"; }
- setTimeout(()=>btn.textContent="Salin",1500);
+ setTimeout(()=>btn.textContent=old,1500);
 }
 function download(name,text){
  const a=document.createElement("a");
@@ -255,17 +323,17 @@ async function pAppr(m){
  (rows.map(r=>{
   const kosong=!r.content||String(r.content).trim().length<40;
   return `<div class="card">
-   <div><span class="tag ${r.level==="red"?"bad":"warn"}">${esc(r.level||"")}</span><span class="muted" style="font-size:12px">${fmt(r.created_at)}</span></div>
-   <b style="display:block;margin-top:6px">${esc(r.action_type)}</b>
-   ${r.reason?`<p class="muted" style="margin:6px 0">Alasan: ${esc(r.reason)}</p>`:""}
-   ${r.impact?`<p class="muted" style="margin:6px 0">Dampak: ${esc(r.impact)}</p>`:""}
+   <div><span class="tag ${r.level==="red"?"bad":"warn"}">${esc(r.level||"")}</span><span class="meta">${fmt(r.created_at)}</span></div>
+   <h3 style="margin:10px 0 0">${esc(r.action_type)}</h3>
+   ${r.reason?`<div class="meta" style="margin-top:8px">Alasan: ${esc(r.reason)}</div>`:""}
+   ${r.impact?`<div class="meta">Dampak: ${esc(r.impact)}</div>`:""}
    <div class="res">${esc(r.content||"(isi kosong)")}</div>
-   ${kosong?'<p class="err">Isi usulan kosong atau tidak lengkap. Sebaiknya tolak.</p>':""}
+   ${kosong?'<div class="err">Isi usulan kosong atau tidak lengkap. Sebaiknya tolak.</div>':""}
    <div class="actions">
     <button class="btn" data-ap="${r.id}" data-d="approved" ${kosong?"disabled":""}>Setujui</button>
     <button class="btn ghost" data-ap="${r.id}" data-d="rejected">Tolak</button>
    </div></div>`;
- }).join("")||'<div class="card"><p class="muted">Tidak ada keputusan yang menunggu.</p></div>');
+ }).join("")||empty("Tidak ada keputusan yang menunggu.","Semua sudah beres."));
  m.querySelectorAll("[data-ap]").forEach(b=>b.onclick=async()=>{
   if(b.dataset.d==="approved" && !confirm("Setujui keputusan ini?")) return;
   b.disabled=true;
@@ -281,22 +349,22 @@ async function pSales(m){
  const ok=rows.filter(r=>r.verified), wait=rows.filter(r=>!r.verified);
  const total=ok.reduce((s,r)=>s+Number(r.amount||0),0);
  m.innerHTML=head("Penjualan","Hanya pembayaran yang sudah terverifikasi dihitung sebagai pendapatan.")+
- `<div class="grid">${stat("Pendapatan terverifikasi",rp(total),ok.length+" transaksi")}${stat("Menunggu verifikasi",wait.length,"belum dihitung")}</div>
- <div class="card"><span class="muted">Bagi hasil dihitung sistem dari keuntungan bersih: owner 70%, dana AI 30%.</span></div>
- <div class="card">${rows.map(r=>`<div class="row"><b>${rp(r.amount)}</b> <span class="muted">${esc(r.source||"-")}</span><div class="muted" style="font-size:12px;margin:2px 0">${fmt(r.created_at)}</div><span class="tag ${r.verified?"ok":"warn"}">${r.verified?"terverifikasi":"menunggu"}</span></div>`).join("")||'<p class="muted">Belum ada pembayaran.</p>'}</div>`;
+ `<div class="grid">${stat("Pendapatan terverifikasi",rp(total),ok.length+" transaksi","t-ok","Rp")}${stat("Menunggu verifikasi",wait.length,"belum dihitung","t-warn","…")}</div>
+ <div class="card"><div class="note">Bagi hasil dihitung sistem dari keuntungan bersih: owner 70%, dana AI 30%.</div></div>
+ <div class="card">${rows.map(r=>`<div class="row"><b>${rp(r.amount)}</b> <span class="meta" style="margin-left:6px">${esc(r.source||"-")}</span><div class="meta">${fmt(r.created_at)}</div><div style="margin-top:6px"><span class="tag ${r.verified?"ok":"warn"}">${r.verified?"terverifikasi":"menunggu"}</span></div></div>`).join("")||empty("Belum ada pembayaran.")}</div>`;
 }
 
 async function pProspek(m){
  const rows=await api("/rest/v1/leads?select=name,channel,stage,consent,created_at&order=created_at.desc&limit=100");
  m.innerHTML=head("Prospek","Calon pembeli. Hanya yang sudah memberi izin boleh dihubungi.")+
- `<div class="grid">${stat("Total prospek",rows.length,"")}${stat("Sudah memberi izin",rows.filter(r=>r.consent).length,"boleh dihubungi")}</div>
- <div class="card">${rows.map(r=>`<div class="row"><b>${esc(r.name||"tanpa nama")}</b> <span class="muted">${esc(r.channel||"-")}</span><div class="muted" style="font-size:12px;margin:2px 0">${esc(r.stage)} · ${fmt(r.created_at)}</div><span class="tag ${r.consent?"ok":""}">${r.consent?"izin dihubungi":"belum ada izin"}</span></div>`).join("")||'<p class="muted">Belum ada prospek.</p>'}</div>`;
+ `<div class="grid">${stat("Total prospek",rows.length,"","t-navy","P")}${stat("Sudah memberi izin",rows.filter(r=>r.consent).length,"boleh dihubungi","t-ok","✓")}</div>
+ <div class="card">${rows.map(r=>`<div class="row"><b>${esc(r.name||"tanpa nama")}</b> <span class="meta" style="margin-left:6px">${esc(r.channel||"-")}</span><div class="meta">${esc(r.stage)} · ${fmt(r.created_at)}</div><div style="margin-top:6px"><span class="tag ${r.consent?"ok":""}">${r.consent?"izin dihubungi":"belum ada izin"}</span></div></div>`).join("")||empty("Belum ada prospek.")}</div>`;
 }
 
 async function pAkun(m){
  m.innerHTML=head("Akun","Sesi dan keamanan dashboard.")+
- `<div class="card"><b>Sesi</b><p class="muted">Keluar dari perangkat ini.</p><button class="btn ghost" id="logout">Keluar</button></div>
-  <div class="card"><b>Keamanan</b><p class="muted">Aktifkan verifikasi dua langkah di email, Supabase, dan Lynk. Ganti password jika ada aktivitas yang tidak Anda kenali.</p></div>`;
+ `<div class="card"><h3>Sesi</h3><p class="meta" style="margin:0 0 12px">Keluar dari perangkat ini.</p><button class="btn ghost" id="logout">Keluar</button></div>
+  <div class="card"><h3>Keamanan</h3><p class="meta" style="margin:0">Aktifkan verifikasi dua langkah di email, Supabase, dan Lynk. Ganti password jika ada aktivitas yang tidak Anda kenali.</p></div>`;
  $("logout").onclick=()=>{ TOK=""; localStorage.removeItem("omnia_token"); clearInterval(TIMER); showGate("login"); };
 }
 
