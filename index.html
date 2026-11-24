@@ -407,6 +407,49 @@ start();
   window.scrollTo(0,0);
  };
 })();
+</script><style>
+@media(max-width:820px){
+ aside{display:block!important}
+ #nav{display:flex!important;flex-direction:row!important;overflow-x:auto!important;overflow-y:hidden;width:100%;-webkit-overflow-scrolling:touch;touch-action:pan-x;user-select:none;-webkit-user-select:none}
+ #nav button{touch-action:pan-x;flex:0 0 auto}
+}
+</style>
+<script>
+(function(){
+ const old=document.getElementById("nav");
+ const nav=old.cloneNode(false);
+ old.replaceWith(nav);
+
+ const items=[["home","Beranda"],["emp","Karyawan"],["ceo","CEO"],["hasil","Hasil"],["appr","Setujui"],["sales","Penjualan"],["prospek","Prospek"],["akun","Akun"]];
+ const saved=localStorage.getItem("omnia_page");
+ const aktif=items.some(i=>i[0]===saved)?saved:"home";
+
+ function pilih(p){
+  localStorage.setItem("omnia_page",p);
+  if(typeof go==="function") go(p);
+ }
+
+ items.forEach(([p,l])=>{
+  const b=document.createElement("button");
+  b.dataset.p=p;
+  b.textContent=l;
+  if(p===aktif) b.className="on";
+  let x=0,y=0,t=0;
+  b.addEventListener("pointerdown",e=>{x=e.clientX;y=e.clientY;t=Date.now();});
+  b.addEventListener("pointerup",e=>{
+   const geser=Math.hypot(e.clientX-x,e.clientY-y);
+   if(geser<8 && Date.now()-t<400) pilih(p);
+  });
+  nav.appendChild(b);
+ });
+
+ if(!document.getElementById("app").classList.contains("hide")){
+  PAGE=aktif;
+  if(typeof go==="function") go(aktif);
+ } else {
+  PAGE=aktif;
+ }
+})();
 </script>
 </body>
 </html>
